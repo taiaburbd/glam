@@ -1,0 +1,12 @@
+backbone: efficientnet
+temporal: transformer
+vf_hidden_dim: 256
+temporal_hidden: 256
+fused_dim: 256
+training:
+  lr: 0.0008757609483301022
+  weight_decay: 4.219609485938437e-05
+  batch_size: 16
+  loss_type: nll
+nas_score: 1.6348438262939453
+nas_n_trials: 20

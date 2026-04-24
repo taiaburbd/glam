@@ -1,0 +1,39 @@
+# GLAM — Master Hydra Configuration
+defaults:
+  - model: convnext_lstm
+  - _self_
+
+project:
+  name: "glam"
+  seed: 42
+
+data:
+  dir: "data"
+  batch_size: 32
+  num_workers: 4
+  n_vf_points: 54         # 24-2 VF test points
+  max_visits: 10          # max longitudinal visits per patient
+  n_clinical_features: 12
+  image_size: [224, 224]
+
+training:
+  max_epochs: 100
+  learning_rate: 3.0e-4
+  weight_decay: 1.0e-4
+  scheduler: "cosine"
+  warmup_epochs: 5
+  gradient_clip_val: 1.0
+  early_stopping_patience: 15
+
+loss:
+  type: "weighted_dual"  # weighted_dual | nll
+  md_weight: 1.0
+  vfi_weight: 0.8
+  fast_progressor_threshold: -1.0
+  fast_progressor_boost: 2.0
+
+experiment:
+  use_wandb: false
+  log_every_n_steps: 10
+  save_top_k: 3
+  checkpoint_dir: "checkpoints"

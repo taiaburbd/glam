@@ -1,0 +1,3 @@
+GLAM - Challenge: Predicting the progression rate in highly myopic glaucomatous patients
+Prediction of the rate of progression in dB/year of MD (mean deviation) and %/year of VFI (visual field index) of highly myopic and glaucomatous patients via deep learning.
+* Required skills: Deep Learning - Data Management

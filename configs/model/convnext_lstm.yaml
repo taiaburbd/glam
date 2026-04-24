@@ -1,0 +1,39 @@
+# ConvNeXt-V2 + Bidirectional LSTM + Attention Fusion
+# Top architecture for glaucoma progression (2024-2025 literature)
+
+_target_: "src.models.heads.GLAMModel"
+
+backbone:
+  _target_: "src.models.backbones.ConvNeXtBackbone"
+  pretrained: true
+  freeze_layers: 2
+
+vf_encoder:
+  _target_: "src.models.backbones.VisualFieldEncoder"
+  n_points: 54
+  hidden_dim: 256
+
+temporal_model:
+  _target_: "src.models.temporal.BidirectionalLSTM"
+  input_dim: 256
+  hidden_dim: 256
+  num_layers: 2
+  dropout: 0.3
+
+fusion:
+  _target_: "src.models.fusion.AttentionFusion"
+  structural_dim: 768    # ConvNeXt-Small output
+  functional_dim: 512    # BiLSTM output (256 * 2)
+  clinical_dim: 128
+  fused_dim: 512
+  dropout: 0.2
+
+clinical_embedder:
+  _target_: "src.models.fusion.ClinicalEmbedder"
+  n_clinical_features: 12
+  embed_dim: 128
+
+prediction_head:
+  _target_: "src.models.heads.ProgressionHead"
+  input_dim: 512
+  dropout: 0.3

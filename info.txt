@@ -1,0 +1,56 @@
+GLAM Project — Complete Setup                                                                                          
+                                                                                                                           
+  Project Structure                                                                                                      
+                                                                                                                           
+  glam/                                                                                                                    
+  ├── validate_idea.py          ← Claude Opus 4.6 idea validator (run this first!)                                       
+  ├── pyproject.toml            ← uv dependencies                                                                          
+  ├── configs/                                                                                                             
+  │   ├── config.yaml           ← Hydra master config                                                                      
+  │   └── model/convnext_lstm.yaml                                                                                         
+  ├── src/                                                                                                               
+  │   ├── models/                                                                                                          
+  │   │   ├── backbones.py      ← ConvNeXt-V2, EfficientNet-B3, VF encoder                                                 
+  │   │   ├── temporal.py       ← Bidirectional LSTM, Temporal Transformer                                                 
+  │   │   ├── fusion.py         ← Attention fusion + clinical embedder                                                     
+  │   │   └── heads.py          ← Dual regression (MD + VFI) + full GLAMModel                                              
+  │   ├── data/                                                                                                            
+  │   │   ├── loaders.py        ← PyTorch Dataset + DataLoaders                                                            
+  │   │   └── preprocessing.py  ← Polars temporal alignment + OLS rates                                                    
+  │   ├── losses/progression.py ← Weighted Huber + Gaussian NLL                                                            
+  │   └── utils/                ← Metrics, reproducibility                                                                 
+  ├── scripts/train.py          ← Lightning + Hydra training                                                               
+  ├── tests/test_models.py      ← Shape sanity tests                                                                       
+  └── knowledge_base/                                                                                                      
+      ├── 01_glaucoma_overview.md                                                                                          
+      ├── 02_visual_field_analysis.md                                                                                      
+      ├── 03_deep_learning_approaches.md                                                                                   
+      ├── 04_datasets.md                                                                                                   
+      ├── 05_key_papers.md                                                                                                 
+      └── 06_tech_stack.md                                                                                                 
+                                                                                                                           
+  Quick Start                                                                                                              
+                                                                                                                           
+  # 1. Install deps                                                                                                        
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  uv sync                                                                                                                  
+                                                                                                                         
+  # 2. Set API key                                                                                                         
+  cp .env.example .env   # add ANTHROPIC_API_KEY                                                                         
+                                                                                                                           
+  # 3. Validate the idea with Claude                                                                                       
+  python validate_idea.py                                                                                                  
+  # → Saves full analysis to reports/idea_validation_report.md                                                             
+                                                                                                                           
+  # 4. Train (after getting data)
+  python scripts/train.py                                                                                                  
+                                                                                                                         
+  Key Design Decisions                                                                                                     
+   
+  - Architecture: ConvNeXt-V2 + BiLSTM + Attention Fusion — best 2024-2025 results (0.97 AUC)                              
+  - Dual targets: Predicts MD (dB/year) AND VFI (%/year) simultaneously                                                  
+  - Clinical weighting: Fast progressors (MD < -1.0 dB/year) are up-weighted ×2                                            
+  - Datasets: Start with GRAPE + UWHVF (both open access)                                                                  
+  - Claude Opus 4.6 with adaptive thinking for deep idea analysis                                                          
+                                                                                                                           
+  The knowledge base has everything you need to start studying before touching any data.                              
