@@ -1,0 +1,28 @@
+{
+  "n_eyes": 1385,
+  "n_patients": 756,
+  "n_train": 962,
+  "n_val": 209,
+  "n_test": 214,
+  "n_train_patients": 528,
+  "n_val_patients": 112,
+  "n_test_patients": 116,
+  "k_input": 3,
+  "min_future_visits": 3,
+  "min_future_years": 1.0,
+  "md_rate_mean": -0.24028266706896761,
+  "md_rate_std": 0.8445379456658233,
+  "n_fast": 152,
+  "pct_fast": 10.974729241877256,
+  "n_total_visits_mean": 8.267870036101083,
+  "n_total_visits_std": 2.4319674081752534,
+  "n_future_visits_mean": 5.267870036101083,
+  "input_span_median": 2.2559890485968523,
+  "future_span_median": 3.8795345653661997,
+  "future_span_iqr": [
+    2.3518138261464685,
+    8.79671457905544
+  ],
+  "md_baseline_mean": -5.368531354459153,
+  "md_baseline_std": 5.4156571416043855
+}

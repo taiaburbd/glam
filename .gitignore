@@ -1,27 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.development
-.env.test
-.env.production
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+*.egg-info/
+dist/
+build/
 
-.venv
-
-papers/
-reports/
+# Local data and manuscripts (never commit)
 data/
-models/
+paper/
+papers/
+
+# Outputs
 checkpoints/
-logs/
-results/
+outputs/
+
 wandb/
-.ruff_cache/
-.pytest_cache/
-.mypy_cache/
+logs/
+*.log
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE
 .vscode/
+.idea/
+*.DS_Store
+
+# Model weights
+*.pt
+*.pth
+*.ckpt
+*.pkl
+
+# Hydra outputs
+.hydra/
+multirun/

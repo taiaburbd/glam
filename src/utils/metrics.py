@@ -4,7 +4,7 @@ Covers both regression accuracy and clinical utility.
 """
 
 import numpy as np
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.metrics import roc_auc_score
 from typing import Any
 
 
@@ -17,9 +17,13 @@ def compute_regression_metrics(
     Standard regression metrics for progression rate prediction.
     All values in the same unit as the target (dB/year or %/year).
     """
-    mae = mean_absolute_error(y_true, y_pred)
-    rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-    r2 = r2_score(y_true, y_pred)
+    y_pred = np.asarray(y_pred, dtype=np.float64).ravel()
+    y_true = np.asarray(y_true, dtype=np.float64).ravel()
+    mae = float(np.mean(np.abs(y_true - y_pred)))
+    rmse = float(np.sqrt(np.mean((y_true - y_pred) ** 2)))
+    ss_res = float(np.sum((y_true - y_pred) ** 2))
+    ss_tot = float(np.sum((y_true - y_true.mean()) ** 2))
+    r2 = float(1.0 - ss_res / ss_tot) if ss_tot > 1e-12 else 0.0
     bias = float(np.mean(y_pred - y_true))
 
     p = f"{prefix}_" if prefix else ""
@@ -56,10 +60,16 @@ def compute_clinical_metrics(
 
     within_half_db = float(np.mean(np.abs(md_pred - md_true) <= 0.5))
 
+    auc = float("nan")
+    if len(np.unique(is_fast_true)) == 2:
+        # Lower (more negative) predicted rate → more likely fast progressor
+        auc = float(roc_auc_score(is_fast_true, -md_pred))
+
     return {
         "fast_progressor_sensitivity": sensitivity,
         "fast_progressor_specificity": specificity,
         "fast_progressor_ppv": ppv,
+        "fast_progressor_auc": auc,
         "within_half_db_pct": within_half_db,
     }
 
